@@ -1,6 +1,6 @@
 # tiny-stt
 
-A pnpm 12 workspace for local speech-to-text in browsers and Node.js:
+A npm package that uses [whistle](https://cactuscompute.com/blog/whistle), an minimal open speech recognition model, for local speech-to-text in browsers and Node.js.
 
 | Package | Purpose |
 | --- | --- |
