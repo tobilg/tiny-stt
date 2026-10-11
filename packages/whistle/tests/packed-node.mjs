@@ -3,6 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const source = resolve(process.argv[2] ?? '.'),
   consumer = await mkdtemp(join(tmpdir(), 'whistle packed '));
@@ -55,7 +56,11 @@ const w=await createWhistle({assetsPath:new URL('./local assets/',import.meta.ur
   );
   const output = execFileSync(
     process.execPath,
-    ['--import', join(source, 'tests/deny-network.mjs'), join(consumer, 'check.mjs')],
+    [
+      '--import',
+      pathToFileURL(join(source, 'tests/deny-network.mjs')).href,
+      join(consumer, 'check.mjs'),
+    ],
     { cwd: tmpdir(), encoding: 'utf8', timeout: 30000 },
   );
   assert.match(output, /passed/);

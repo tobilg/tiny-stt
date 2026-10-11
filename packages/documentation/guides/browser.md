@@ -8,7 +8,8 @@ directory's served URL. This example is typechecked against the package exports:
 
 {@includeCode ../examples/browser-file.ts}
 
-Decoding averages channels and resamples through Web Audio. Supported codecs depend
+Web Audio decodes directly at 16 kHz, independent of the output device's sample
+rate, then averages channels. Supported codecs depend
 on the browser; PCM WAV is tested. Decode errors use `AUDIO_DECODE_FAILED` and files
 over 30 seconds use `AUDIO_TOO_LONG`. An application that handles many files should
 keep one engine across files and dispose it when the UI closes.

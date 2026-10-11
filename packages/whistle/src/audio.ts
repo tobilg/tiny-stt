@@ -16,7 +16,8 @@ export { WhistleError } from './errors.js';
  * @throws {@link WhistleError} with AUDIO_DECODE_FAILED for invalid/unsupported input,
  * AUDIO_TOO_LONG for files over 30 seconds, ABORTED on cancellation, or
  * UNSUPPORTED_ENVIRONMENT when Web Audio is unavailable.
- * @remarks Channels are averaged equally and resampled with Web Audio. This function
+ * @remarks Web Audio decodes at 16 kHz independently of the output device's rate,
+ * then channels are averaged equally. This function
  * never truncates long files. Cancellation closes the live context promptly and discards
  * late output; a bounded offline render may finish before its source can be disconnected.
  * @example
@@ -60,7 +61,9 @@ export async function decodeClip(
     throw new WhistleError('UNSUPPORTED_ENVIRONMENT', 'Browser Web Audio decoding is unavailable.');
   let context: AudioContext;
   try {
-    context = new AudioContext();
+    // decodeAudioData resamples to the context's rate. Avoid converting through
+    // a device-dependent intermediate rate (for example 48 kHz -> 44.1 kHz -> 16 kHz).
+    context = new AudioContext({ sampleRate: 16000 });
   } catch (cause) {
     throw new WhistleError('UNSUPPORTED_ENVIRONMENT', 'Cannot create a browser AudioContext.', {
       cause,
@@ -85,7 +88,9 @@ export async function decodeClip(
         if (captureLimit === undefined && buffer.duration > 30)
           throw new WhistleError('AUDIO_TOO_LONG', 'Decoded file exceeds 30 seconds.');
         const duration = Math.min(buffer.duration, captureLimit ?? 30);
-        const length = Math.min(480000, Math.floor(duration * 16000));
+        // Decoding already produced 16 kHz frames. Preserve their integer count;
+        // duration -> samples floating-point round trips can lose another frame.
+        const length = Math.min(buffer.length, Math.floor((captureLimit ?? 30) * 16000));
         if (!length) throw new WhistleError('AUDIO_DECODE_FAILED', 'Decoded audio is too short.');
         // Equal-weight downmix of every channel, independent of speaker layout.
         const mono = context.createBuffer(

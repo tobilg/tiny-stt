@@ -199,7 +199,7 @@ try {
     process.execPath,
     [
       '--import',
-      resolve('tests/deny-network.mjs'),
+      new URL('./deny-network.mjs', import.meta.url).href,
       cli,
       'download',
       '--offline',
@@ -212,7 +212,7 @@ try {
     process.execPath,
     [
       '--import',
-      resolve('tests/deny-network.mjs'),
+      new URL('./deny-network.mjs', import.meta.url).href,
       join(consumer, 'node-example/transcribe.mjs'),
       join(consumer, 'public/whistle'),
       join(consumer, 'jfk.wav'),
@@ -238,7 +238,7 @@ try {
   );
   execFileSync(
     process.execPath,
-    ['--import', resolve('tests/deny-network.mjs'), join(consumer, 'ssr.mjs')],
+    ['--import', new URL('./deny-network.mjs', import.meta.url).href, join(consumer, 'ssr.mjs')],
     { cwd: consumer, stdio: 'pipe' },
   );
   assert.match(

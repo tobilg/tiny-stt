@@ -162,8 +162,8 @@ try {
   const helpers = await page.evaluate(async () => {
     const { decodeAudio } = await import('/dist/audio.js');
     const { startRecording } = await import('/dist/microphone.js');
-    function wav(seconds = 1) {
-      const frames = 48000 * seconds,
+    function wav(seconds = 1, sampleRate = 48000) {
+      const frames = Math.round(sampleRate * seconds),
         b = new ArrayBuffer(44 + frames * 4),
         v = new DataView(b);
       const s = (o, t) => {
@@ -175,8 +175,8 @@ try {
       v.setUint32(16, 16, true);
       v.setUint16(20, 1, true);
       v.setUint16(22, 2, true);
-      v.setUint32(24, 48000, true);
-      v.setUint32(28, 192000, true);
+      v.setUint32(24, sampleRate, true);
+      v.setUint32(28, sampleRate * 4, true);
       v.setUint16(32, 4, true);
       v.setUint16(34, 16, true);
       s(36, 'data');
@@ -188,7 +188,30 @@ try {
       return new Blob([b], { type: 'audio/wav' });
     }
     const stereo = wav();
-    const mono = await decodeAudio(stereo);
+    // Reproduce Linux Chromium's 44.1 kHz default even on a 48 kHz host.
+    // Explicit context options still win, so the decoder can select its own rate.
+    async function decodeWithDefaultRate(sampleRate) {
+      const NativeAudioContext = globalThis.AudioContext;
+      globalThis.AudioContext = class extends NativeAudioContext {
+        constructor(options) {
+          super({ sampleRate, ...options });
+        }
+      };
+      try {
+        return await decodeAudio(stereo);
+      } finally {
+        globalThis.AudioContext = NativeAudioContext;
+      }
+    }
+    const mono = await decodeWithDefaultRate(44100);
+    const otherRate = await decodeWithDefaultRate(48000);
+    // 1001 / 16000 * 16000 is slightly below 1001 in floating point.
+    const short = await decodeAudio(wav(1001 / 16000, 16000));
+    const boundary = await decodeAudio(wav(30, 16000));
+    const overBoundary = await decodeAudio(wav(480001 / 16000, 16000)).then(
+      () => '',
+      (e) => e.code,
+    );
     const corrupt = await decodeAudio(new Blob(['bad'])).then(
       () => '',
       (e) => e.code,
@@ -272,6 +295,10 @@ try {
     );
     return {
       sampleCount: mono.length,
+      otherRateSamples: otherRate.length,
+      shortSamples: short.length,
+      boundarySamples: boundary.length,
+      overBoundary,
       mean: mono.slice(100, 15900).reduce((a, b) => a + b, 0) / 15800,
       corrupt,
       long,
@@ -288,6 +315,10 @@ try {
     };
   });
   assert.equal(helpers.sampleCount, 16000);
+  assert.equal(helpers.otherRateSamples, 16000);
+  assert.equal(helpers.shortSamples, 1001);
+  assert.equal(helpers.boundarySamples, 480000);
+  assert.equal(helpers.overBoundary, 'AUDIO_TOO_LONG');
   assert.ok(Math.abs(helpers.mean - 0.5) < 0.001);
   assert.equal(helpers.corrupt, 'AUDIO_DECODE_FAILED');
   assert.equal(helpers.long, 'AUDIO_TOO_LONG');

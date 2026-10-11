@@ -112,7 +112,11 @@ test('missing assets and remote paths fail clearly', async () => {
 test('network-denied subprocess: initialization, repeated calls, recovery and clean exit', () => {
   const child = spawnSync(
     process.execPath,
-    ['--import', resolve('tests/deny-network.mjs'), resolve('tests/offline-node.mjs')],
+    [
+      '--import',
+      new URL('../deny-network.mjs', import.meta.url).href,
+      resolve('tests/offline-node.mjs'),
+    ],
     { encoding: 'utf8', timeout: 30000, env: { ...process.env, WHISTLE_ASSETS: resolve(assets) } },
   );
   assert.equal(child.status, 0, child.stderr);

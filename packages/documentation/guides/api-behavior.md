@@ -131,7 +131,8 @@ interface Recording {
 startRecording(options?: RecordingOptions): Promise<Recording>;
 ```
 
-Decoding averages all channels equally and resamples through Web Audio. Resampling
+Web Audio decodes directly at 16 kHz, independent of the output device's sample
+rate, then averages all channels equally. Resampling
 filter overshoot is bounded to `[-1,1]`. File clips exceeding 30 seconds are rejected.
 No remote decoder is used. Browser decoding/rendering has no cooperative abort API:
 cancellation rejects promptly, closes the live AudioContext, and discards any late

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { cp, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { join } from 'node:path';
 import test from 'node:test';
 import { validateManifest } from '../dist/assets.js';
 import { manifest } from '../dist/inventory.js';
@@ -31,7 +31,7 @@ test('public ESM imports perform no downloads or worker initialization during SS
     process.execPath,
     [
       '--import',
-      resolve('tests/deny-network.mjs'),
+      new URL('./deny-network.mjs', import.meta.url).href,
       '--input-type=module',
       '-e',
       `await import('@tiny-stt/whistle');await import('@tiny-stt/whistle/node');await import('@tiny-stt/whistle/audio');await import('@tiny-stt/whistle/microphone');const {createWhistle}=await import('@tiny-stt/whistle');try{await createWhistle();process.exitCode=1;}catch(e){if(e.code!=='UNSUPPORTED_ENVIRONMENT')throw e;}`,
