@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["node"],
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@tiny-stt/whistle": ["../whistle/src/browser.ts"],
+      "@tiny-stt/whistle/audio": ["../whistle/src/audio.ts"],
+      "@tiny-stt/whistle/microphone": ["../whistle/src/microphone.ts"]
+    }
+  },
+  "include": ["../whistle/src/**/*.ts", "../react/src/**/*.ts"]
+}

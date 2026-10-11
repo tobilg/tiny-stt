@@ -1,0 +1,53 @@
+{
+  "name": "tiny-stt-workspace",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.4.2",
+  "engines": {
+    "node": ">=22.12",
+    "pnpm": ">=12 <13"
+  },
+  "scripts": {
+    "build": "pnpm --filter @tiny-stt/whistle run build && pnpm --filter @tiny-stt/react run build",
+    "typecheck": "pnpm build && pnpm --filter @tiny-stt/whistle run typecheck && pnpm --filter @tiny-stt/react run typecheck && pnpm --filter @tiny-stt/demo run typecheck",
+    "test": "pnpm --filter @tiny-stt/whistle run test && pnpm --filter @tiny-stt/react run test",
+    "test:integration": "pnpm --filter @tiny-stt/whistle run test:integration",
+    "test:browser": "pnpm --filter @tiny-stt/whistle run test:browser",
+    "test:consumer": "pnpm --filter @tiny-stt/whistle run test:consumer",
+    "test:consumer:packed": "pnpm --filter @tiny-stt/whistle run test:consumer:packed",
+    "test:release": "node --test scripts/release.test.mjs",
+    "release:check": "node scripts/pack.mjs",
+    "test:packed-node": "pnpm --filter @tiny-stt/whistle run test:packed-node",
+    "test:abi": "pnpm --filter @tiny-stt/whistle run test:abi",
+    "test:browser:download": "pnpm --filter @tiny-stt/whistle run test:browser:download",
+    "assets:prepare": "pnpm --filter @tiny-stt/whistle run assets:prepare",
+    "example:node": "pnpm build && pnpm --filter @tiny-stt/documentation run example:node",
+    "example:browser:prepare": "pnpm demo:prepare",
+    "example:browser": "pnpm demo:dev",
+    "example:browser:build": "pnpm demo:build",
+    "example:browser:preview": "pnpm demo:preview",
+    "pack:whistle": "pnpm --dir packages/whistle pack",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "lint": "biome lint --error-on-warnings .",
+    "lint:fix": "biome lint --write .",
+    "check": "biome check --error-on-warnings .",
+    "check:fix": "biome check --write .",
+    "docs:build": "pnpm build && pnpm --filter @tiny-stt/documentation run build",
+    "docs:check": "pnpm build && pnpm --filter @tiny-stt/documentation run check",
+    "docs:dev": "pnpm build && pnpm --filter @tiny-stt/documentation run dev",
+    "docs:preview": "pnpm --filter @tiny-stt/documentation run preview",
+    "test:docs": "pnpm docs:check && pnpm --filter @tiny-stt/documentation run build && pnpm --filter @tiny-stt/documentation run test",
+    "demo:prepare": "pnpm build && pnpm --filter @tiny-stt/demo run assets:prepare",
+    "demo:dev": "pnpm build && pnpm --filter @tiny-stt/demo run dev",
+    "demo:build": "pnpm build && pnpm --filter @tiny-stt/demo run build",
+    "demo:build:pages": "pnpm build && pnpm --filter @tiny-stt/demo run build:pages",
+    "demo:preview": "pnpm --filter @tiny-stt/demo run preview",
+    "test:demo": "pnpm demo:build && pnpm --filter @tiny-stt/demo run test",
+    "pack:react": "pnpm build && pnpm --dir packages/react pack"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "yaml": "2.9.1"
+  }
+}

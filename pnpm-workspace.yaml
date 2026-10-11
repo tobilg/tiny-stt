@@ -1,0 +1,16 @@
+packages:
+  - packages/whistle
+  - packages/react
+  - packages/documentation
+  - packages/demo
+
+allowBuilds:
+  esbuild: true
+
+# Preserve these already-installed versions from the npm lockfile during migration.
+# All other versions retain pnpm's default one-day minimum release age.
+minimumReleaseAgeExclude:
+  - '@types/node@26.6.5'
+
+storeDir: .cache/pnpm-store
+cacheDir: .cache/pnpm-cache

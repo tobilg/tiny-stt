@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Public hook lifecycle tests</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module">
+    import { useWhistle, useWhistleRecorder } from '@tiny-stt/react';
+    import { decodeAudio } from '@tiny-stt/whistle/audio';
+    import { createElement, StrictMode, useEffect } from 'react';
+    import { createRoot } from 'react-dom/client';
+
+    const root = createRoot(document.getElementById('root'));
+    function Harness({ assetsUrl, cache }) {
+      const whistle = useWhistle({ assetsUrl, cache });
+      const recorder = useWhistleRecorder(whistle, { maxDurationSeconds: 12 });
+      const second = useWhistle({ assetsUrl: '/demo/whistle/' });
+      useEffect(() => {
+        Object.assign(window.hookTest, { whistle, recorder, second });
+      });
+      return createElement(
+        'output',
+        { id: 'state' },
+        `${whistle.ready}/${whistle.pending}/${recorder.status}`,
+      );
+    }
+    window.hookTest = {
+      render: (options = { assetsUrl: '/demo/whistle/' }) =>
+        root.render(createElement(StrictMode, null, createElement(Harness, options))),
+      unmount: () => root.unmount(),
+      pcm: () => decodeAudio(window.fixtureBlob),
+    };
+    window.hookTest.render();
+    </script>
+  </body>
+</html>

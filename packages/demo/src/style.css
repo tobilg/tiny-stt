@@ -1,0 +1,135 @@
+:root {
+  font-family: system-ui, sans-serif;
+  color: #18322d;
+  background: #f4f1e9;
+  line-height: 1.55;
+  color-scheme: light;
+}
+body {
+  margin: 0;
+}
+main {
+  max-width: 760px;
+  margin: 7vh auto;
+  padding: 24px;
+}
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+}
+h1 {
+  font-size: clamp(2.7rem, 7vw, 4.6rem);
+  line-height: 1.02;
+  font-weight: 550;
+  letter-spacing: -0.05em;
+}
+h2 {
+  font-size: 1rem;
+  margin-top: 2.5rem;
+}
+button {
+  font: inherit;
+  background: #214d40;
+  color: white;
+  border: 1px solid #214d40;
+  border-radius: 5px;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid #bd713a;
+  outline-offset: 4px;
+}
+#record {
+  touch-action: none;
+}
+#cancel {
+  background: transparent;
+  color: #214d40;
+}
+.controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  border-top: 1px solid #c9d0c6;
+  padding-top: 24px;
+}
+.controls label {
+  width: 100%;
+  margin: 12px 0;
+}
+.settings {
+  display: flex;
+  gap: 12px 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.setting,
+.model-help,
+.transcript-language {
+  font-size: 0.9rem;
+}
+.select-control {
+  display: inline-block;
+  position: relative;
+  margin-left: 1rem;
+}
+.select-control::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: 0.875rem;
+  top: 50%;
+  width: 0.375rem;
+  height: 0.375rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+.select-control select {
+  appearance: none;
+  font: inherit;
+  color: inherit;
+  background: #fffdf8;
+  border: 1px solid #c9d0c6;
+  border-radius: 5px;
+  padding-block: 0.5rem;
+  padding-inline: 0.75rem 2.25rem;
+}
+.select-control:has(select:disabled) {
+  opacity: 0.55;
+}
+.model-help,
+.transcript-language {
+  color: #59645e;
+}
+output {
+  display: block;
+  min-height: 5rem;
+  border-left: 3px solid #be7544;
+  padding: 12px 20px;
+  background: #fffdf8;
+  font-size: 1.3rem;
+  white-space: pre-wrap;
+}
+pre {
+  overflow: auto;
+  max-height: 240px;
+  font-size: 0.8rem;
+}
+footer {
+  margin-top: 48px;
+  color: #59645e;
+  font-size: 0.85rem;
+}
+#status {
+  min-height: 1.6em;
+}

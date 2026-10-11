@@ -1,0 +1,68 @@
+{
+  "name": "@tiny-stt/whistle",
+  "version": "0.1.0",
+  "description": "Independent local Whistle speech-to-text for browsers and Node.js",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tobilg/tiny-stt.git",
+    "directory": "packages/whistle"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "files": [
+    "dist",
+    "vendor",
+    "asset-lock.json",
+    "LICENSE",
+    "NOTICE",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/browser.d.ts",
+      "import": "./dist/browser.js"
+    },
+    "./node": {
+      "types": "./dist/node.d.ts",
+      "import": "./dist/node.js"
+    },
+    "./audio": {
+      "types": "./dist/audio.d.ts",
+      "import": "./dist/audio.js"
+    },
+    "./microphone": {
+      "types": "./dist/microphone.d.ts",
+      "import": "./dist/microphone.js"
+    }
+  },
+  "bin": {
+    "whistle": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/*.test.mjs",
+    "test:integration": "node --test tests/integration/*.test.mjs",
+    "test:browser": "node tests/browser.mjs",
+    "test:consumer": "node tests/consumer.mjs",
+    "test:consumer:packed": "node tests/consumer.mjs --packed",
+    "prepack": "node scripts/build.mjs",
+    "test:packed-node": "node tests/packed-node.mjs",
+    "test:abi": "node tests/abi.mjs",
+    "test:browser:download": "node tests/default-browser.mjs",
+    "assets:prepare": "node dist/cli.js download --out .cache/assets"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "esbuild": "^0.28.2",
+    "playwright": "^1.64.0",
+    "typescript": "^7.0.2"
+  }
+}

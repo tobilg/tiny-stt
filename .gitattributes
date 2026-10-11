@@ -1,0 +1,3 @@
+# These files are locked by byte-level SHA-256, including upstream license text.
+packages/whistle/vendor/** -text
+packages/whistle/tests/fixtures/*.wav binary

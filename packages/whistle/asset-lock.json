@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "compatibilityId": "whistle-b358dda-needle-c7c415a-esm1",
+  "runtime": {
+    "repository": "Cactus-Compute/needle3",
+    "revision": "c7c415a3d1b3d929014bc6e866d51ebb971f7089"
+  },
+  "model": {
+    "repository": "Cactus-Compute/whistle",
+    "revision": "b358ddadd89b7a713b5aa131f23032d3cca1b251"
+  },
+  "modifications": "ESM default export; Node-specific filesystem and process hooks disabled; always provide verified wasmBinary. Model bytes retained until worker termination.",
+  "files": {
+    "loader": {
+      "file": "vendor/upstream/needle.js",
+      "bytes": 62823,
+      "sha256": "f3f7366dcad9555b792ee519d2518f3c506038bcb2ffd179e76e850000749359",
+      "url": "https://huggingface.co/Cactus-Compute/needle3/resolve/c7c415a3d1b3d929014bc6e866d51ebb971f7089/wasm/needle.js",
+      "license": "Apache-2.0"
+    },
+    "wasm": {
+      "file": "vendor/upstream/needle.wasm",
+      "bytes": 903655,
+      "sha256": "c19b9ddf9c7de4eb4f37e5f1811c5bbea9f099041d2a27284daf89789ee8523d",
+      "url": "https://huggingface.co/Cactus-Compute/needle3/resolve/c7c415a3d1b3d929014bc6e866d51ebb971f7089/wasm/needle.wasm",
+      "license": "Apache-2.0"
+    },
+    "header": {
+      "file": "vendor/upstream/needle.h",
+      "bytes": 3322,
+      "sha256": "90f347f9dca1199de79967ab199a56e0588bd473fe306051f8d80d146976a324",
+      "url": "https://huggingface.co/Cactus-Compute/needle3/resolve/c7c415a3d1b3d929014bc6e866d51ebb971f7089/wasm/needle.h",
+      "license": "Apache-2.0"
+    },
+    "runtimeLicense": {
+      "file": "vendor/upstream/NEEDLE-LICENSE",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "url": "https://huggingface.co/Cactus-Compute/needle3/resolve/c7c415a3d1b3d929014bc6e866d51ebb971f7089/LICENSE",
+      "license": "Apache-2.0"
+    },
+    "modelLicense": {
+      "file": "vendor/upstream/WHISTLE-LICENSE",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "url": "https://huggingface.co/Cactus-Compute/whistle/resolve/b358ddadd89b7a713b5aa131f23032d3cca1b251/LICENSE",
+      "license": "Apache-2.0"
+    },
+    "model": {
+      "file": "whistle.cact",
+      "bytes": 16919407,
+      "sha256": "b6e02f048568ac5d01a2042556c658061e699acbc0aa2a1439f52f3d461dffeb",
+      "url": "https://huggingface.co/Cactus-Compute/whistle/resolve/b358ddadd89b7a713b5aa131f23032d3cca1b251/whistle.cact",
+      "license": "Apache-2.0"
+    },
+    "adaptedLoader": {
+      "file": "vendor/needle.js",
+      "bytes": 62960,
+      "sha256": "b894e642c085a595b345b317088db1dfceb915a8edc16ce1f902af504adaffa7",
+      "url": null,
+      "license": "Apache-2.0"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+@tiny-stt/whistle is an independent integration, not official Cactus software.
+Original SDK code: Copyright 2026 Tobi. MIT; see LICENSE.
+
+Official Needle JS/WASM runtime and Whistle model: Cactus Compute, Inc.
+Apache License 2.0. Exact distribution licenses are retained as NEEDLE-LICENSE
+and WHISTLE-LICENSE in prepared assets and vendor/upstream in the npm package.
+No separate upstream NOTICE was present in the pinned artifact inventories.
+See asset-lock.json for immutable provenance, sizes, and SHA-256 digests.
+
+vendor/needle.js is modified from the official loader: it adds an ESM default
+export and disables Node-specific filesystem/process hooks. The adapter always
+supplies verified WASM bytes. The official original is retained for comparison.
+No website frontend or worker source is included.

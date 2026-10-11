@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.api.json",
+  "compilerOptions": { "noUnusedLocals": true, "noUnusedParameters": true, "jsx": "react-jsx" },
+  "include": ["examples/**/*.ts", "examples/**/*.tsx"]
+}

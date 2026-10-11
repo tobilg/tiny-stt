@@ -1,0 +1,45 @@
+{
+  "name": "@tiny-stt/react",
+  "version": "0.1.0",
+  "description": "React 19 hooks for local Whistle speech-to-text",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tobilg/tiny-stt.git",
+    "directory": "packages/react"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "peerDependencies": {
+    "@tiny-stt/whistle": "^0.1.0",
+    "react": "^19.0.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/*.test.mjs",
+    "prepack": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@tiny-stt/whistle": "workspace:*",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "typescript": "^7.0.2"
+  }
+}

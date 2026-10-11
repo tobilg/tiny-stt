@@ -1,0 +1,276 @@
+{
+  "date": "2026-10-10",
+  "hardware": {
+    "chip": "Apple M2",
+    "ramBytes": 17179869184,
+    "platform": "macOS arm64"
+  },
+  "fixture": {
+    "file": "tests/fixtures/jfk.wav",
+    "durationSeconds": 11,
+    "samples": 176000,
+    "wordTimestamps": true
+  },
+  "cliFreshDownloadWallSeconds": 1.16,
+  "node22": {
+    "node": "v22.22.2",
+    "coldMs": 64.56587499999999,
+    "clipSeconds": 11,
+    "timestamps": true,
+    "times": [
+      {
+        "firstTokenMs": 296.5,
+        "decodeTokensPerSecond": 118.8,
+        "totalMs": 579.2775
+      },
+      {
+        "firstTokenMs": 266.1,
+        "decodeTokensPerSecond": 126.8,
+        "totalMs": 530.263166
+      },
+      {
+        "firstTokenMs": 256.1,
+        "decodeTokensPerSecond": 126.8,
+        "totalMs": 520.125417
+      },
+      {
+        "firstTokenMs": 257.5,
+        "decodeTokensPerSecond": 127.5,
+        "totalMs": 520.2453329999998
+      },
+      {
+        "firstTokenMs": 256.3,
+        "decodeTokensPerSecond": 125.7,
+        "totalMs": 522.6864169999999
+      },
+      {
+        "firstTokenMs": 257,
+        "decodeTokensPerSecond": 126.6,
+        "totalMs": 521.739333
+      },
+      {
+        "firstTokenMs": 256.7,
+        "decodeTokensPerSecond": 126.4,
+        "totalMs": 521.2847500000003
+      },
+      {
+        "firstTokenMs": 255.8,
+        "decodeTokensPerSecond": 127,
+        "totalMs": 519.4172079999994
+      },
+      {
+        "firstTokenMs": 256.3,
+        "decodeTokensPerSecond": 126.9,
+        "totalMs": 520.9762920000003
+      },
+      {
+        "firstTokenMs": 256.5,
+        "decodeTokensPerSecond": 126.6,
+        "totalMs": 520.5271250000005
+      }
+    ],
+    "rss": [
+      222674944, 222707712, 188940288, 188940288, 188989440, 170360832, 170409984, 170409984,
+      171163648, 171196416
+    ]
+  },
+  "node24": {
+    "node": "v24.21.0",
+    "coldMs": 103.184958,
+    "clipSeconds": 11,
+    "timestamps": true,
+    "times": [
+      {
+        "firstTokenMs": 293.5,
+        "decodeTokensPerSecond": 122.8,
+        "totalMs": 568.6085419999999
+      },
+      {
+        "firstTokenMs": 259.4,
+        "decodeTokensPerSecond": 127.2,
+        "totalMs": 523.5230830000002
+      },
+      {
+        "firstTokenMs": 252.3,
+        "decodeTokensPerSecond": 128,
+        "totalMs": 513.4110409999998
+      },
+      {
+        "firstTokenMs": 250.7,
+        "decodeTokensPerSecond": 131.2,
+        "totalMs": 506.7804160000003
+      },
+      {
+        "firstTokenMs": 250.7,
+        "decodeTokensPerSecond": 130.4,
+        "totalMs": 508.06054099999983
+      },
+      {
+        "firstTokenMs": 249.9,
+        "decodeTokensPerSecond": 123.9,
+        "totalMs": 519.3345000000004
+      },
+      {
+        "firstTokenMs": 260.6,
+        "decodeTokensPerSecond": 97.8,
+        "totalMs": 600.067333
+      },
+      {
+        "firstTokenMs": 295.9,
+        "decodeTokensPerSecond": 125.9,
+        "totalMs": 559.9714170000002
+      },
+      {
+        "firstTokenMs": 250.6,
+        "decodeTokensPerSecond": 130.6,
+        "totalMs": 507.69987500000025
+      },
+      {
+        "firstTokenMs": 249.8,
+        "decodeTokensPerSecond": 130.4,
+        "totalMs": 507.4645419999997
+      }
+    ],
+    "rss": [
+      232423424, 215793664, 215793664, 198885376, 198901760, 198918144, 198950912, 195362816,
+      195379200, 195411968
+    ]
+  },
+  "browsers": [
+    {
+      "engine": "chromium",
+      "browser": "156.0.8078.4",
+      "coldMs": 114.70000004768372,
+      "warmCacheMs": 51.299999952316284,
+      "speechTimings": {
+        "firstTokenMs": 276.3,
+        "decodeTokensPerSecond": 129.3,
+        "totalMs": 537.7000000476837
+      },
+      "wordCount": 22,
+      "helpers": {
+        "sampleCount": 16000,
+        "mean": 0.5000152587890625,
+        "corrupt": "AUDIO_DECODE_FAILED",
+        "long": "AUDIO_TOO_LONG",
+        "decodeAborted": "ABORTED",
+        "autoSamples": 320,
+        "manualSamples": 16000,
+        "same": true,
+        "manualSame": true,
+        "cancelledCode": "ABORTED",
+        "lateCode": "ABORTED",
+        "lateTracksStopped": true,
+        "denied": "MICROPHONE_DENIED",
+        "stops": 8
+      },
+      "externalRequests": []
+    },
+    {
+      "engine": "firefox",
+      "browser": "157.0",
+      "coldMs": 196,
+      "warmCacheMs": 129,
+      "speechTimings": {
+        "firstTokenMs": 336,
+        "decodeTokensPerSecond": 102.7,
+        "totalMs": 663
+      },
+      "wordCount": 22,
+      "helpers": {
+        "sampleCount": 16000,
+        "mean": 0.5003001093864441,
+        "corrupt": "AUDIO_DECODE_FAILED",
+        "long": "AUDIO_TOO_LONG",
+        "decodeAborted": "ABORTED",
+        "autoSamples": 320,
+        "manualSamples": 16000,
+        "same": true,
+        "manualSame": true,
+        "cancelledCode": "ABORTED",
+        "lateCode": "ABORTED",
+        "lateTracksStopped": true,
+        "denied": "MICROPHONE_DENIED",
+        "stops": 8
+      },
+      "externalRequests": []
+    },
+    {
+      "engine": "webkit",
+      "browser": "27.2",
+      "coldMs": 134,
+      "warmCacheMs": 55,
+      "speechTimings": {
+        "firstTokenMs": 288,
+        "decodeTokensPerSecond": 122.7,
+        "totalMs": 563
+      },
+      "wordCount": 22,
+      "helpers": {
+        "sampleCount": 16000,
+        "mean": 0.5,
+        "corrupt": "AUDIO_DECODE_FAILED",
+        "long": "AUDIO_TOO_LONG",
+        "decodeAborted": "ABORTED",
+        "autoSamples": 320,
+        "manualSamples": 16000,
+        "same": true,
+        "manualSame": true,
+        "cancelledCode": "ABORTED",
+        "lateCode": "ABORTED",
+        "lateTracksStopped": true,
+        "denied": "MICROPHONE_DENIED",
+        "stops": 8
+      },
+      "externalRequests": []
+    }
+  ],
+  "defaultBrowserAcquisition": {
+    "browser": "156.0.8078.4",
+    "modelUrl": "https://huggingface.co/Cactus-Compute/whistle/resolve/b358ddadd89b7a713b5aa131f23032d3cca1b251/whistle.cact",
+    "externalOrigins": ["https://huggingface.co"],
+    "coldMs": 954,
+    "serviceMs": 545.3999998569489
+  },
+  "abi": {
+    "numberModelLength": "TypeError",
+    "loadStatus": 0,
+    "models": 2,
+    "overflowStatus": 27,
+    "overflowNulIndex": 31,
+    "unloadedStatus": -1,
+    "unloadedError": "no speech model loaded; pass a Whistle .cact to needle_load",
+    "heapBytes": [
+      76808192, 76808192, 76808192, 76808192, 76808192, 76808192, 76808192, 76808192, 76808192,
+      76808192
+    ],
+    "modelLifetime": "retained until worker exit; ownership not documented by upstream"
+  },
+  "linux": [
+    {
+      "platform": "linux",
+      "arch": "arm64",
+      "node": "v22.12.0",
+      "packedInference": "passed",
+      "repeatedCalls": 3,
+      "cancellationRecovery": "passed"
+    },
+    {
+      "platform": "linux",
+      "arch": "arm64",
+      "node": "v24.21.0",
+      "packedInference": "passed",
+      "repeatedCalls": 3,
+      "cancellationRecovery": "passed"
+    }
+  ],
+  "notExecuted": [
+    "Windows",
+    "Linux x64",
+    "shipping Safari/Edge application",
+    "mobile",
+    "physical microphone",
+    "German quality"
+  ],
+  "notes": "Single-machine local measurements, not an SLA. All three browser engines passed cache reuse, corruption replacement, denial fallback and real inference; the table retains representative measured runs. Linux containers used --network none."
+}

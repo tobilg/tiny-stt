@@ -1,0 +1,159 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Run CI and npm publish --dry-run; Pages deploy only from pushed tags
+        type: boolean
+        default: true
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  PUBLISH_NODE_VERSION: '24'
+  PUBLISH_NPM_VERSION: '11.6.2'
+  WRANGLER_SEND_METRICS: 'false'
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      npm_tag: ${{ steps.version.outputs.npm_tag }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
+      dry_run: ${{ steps.version.outputs.dry_run }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.PUBLISH_NODE_VERSION }}
+          package-manager-cache: false
+      - name: Validate version, tag and initial npm setup
+        id: version
+        env:
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+        run: node scripts/release.mjs version
+
+  ci:
+    needs: version
+    uses: ./.github/workflows/ci.yml
+    with:
+      release: true
+
+  publish-npm:
+    needs: [version, ci]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      DRY_RUN: ${{ needs.version.outputs.dry_run }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v8
+        with:
+          name: npm-packages
+          path: artifacts
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.PUBLISH_NODE_VERSION }}
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - name: Install pinned OIDC-capable npm CLI
+        run: npm install --global --ignore-scripts "npm@$PUBLISH_NPM_VERSION"
+      - name: Publish CI's verified tarballs using npm trusted publishing
+        # No NPM_TOKEN or NODE_AUTH_TOKEN secret; no workspace install or rebuild.
+        run: node scripts/release.mjs publish
+
+  deploy-pages:
+    name: deploy-pages (${{ matrix.site }})
+    needs: [version, publish-npm]
+    if: ${{ github.event_name == 'push' && github.ref_type == 'tag' && needs.version.outputs.dry_run != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      deployments: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - site: documentation
+            project: ${{ vars.CLOUDFLARE_DOCS_PROJECT || 'tiny-stt-api-docs' }}
+          - site: demo
+            project: ${{ vars.CLOUDFLARE_DEMO_PROJECT || 'tiny-stt-demo' }}
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: ${{ matrix.site }}
+          path: site
+      - name: Validate Cloudflare configuration
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PAGES_PROJECT: ${{ matrix.project }}
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN" || { echo '::error::Missing CLOUDFLARE_API_TOKEN secret'; exit 1; }
+          test -n "$CLOUDFLARE_ACCOUNT_ID" || { echo '::error::Missing CLOUDFLARE_ACCOUNT_ID secret'; exit 1; }
+          [[ "$PAGES_PROJECT" =~ ^[a-z0-9][a-z0-9-]*$ ]] || { echo '::error::Invalid Pages project name'; exit 1; }
+      - name: Deploy the site verified by CI
+        id: deployment
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: '4.147.0'
+          command: pages deploy site --project-name ${{ matrix.project }} --branch main --commit-hash ${{ github.sha }} --commit-message "v${{ needs.version.outputs.version }}"
+      - name: Deployment summary
+        env:
+          SITE: ${{ matrix.site }}
+          DEPLOYMENT_URL: ${{ steps.deployment.outputs.deployment-url }}
+        run: printf '%s deployed to %s\n' "$SITE" "$DEPLOYMENT_URL" >> "$GITHUB_STEP_SUMMARY"
+
+  github-release:
+    needs: [version, publish-npm]
+    if: ${{ github.event_name == 'push' && github.ref_type == 'tag' && needs.version.outputs.dry_run != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: npm-packages
+          path: artifacts
+      - uses: softprops/action-gh-release@v3
+        with:
+          files: |
+            artifacts/tiny-stt-*.tgz
+            artifacts/release.json
+          fail_on_unmatched_files: true
+          prerelease: ${{ needs.version.outputs.prerelease == 'true' }}
+          generate_release_notes: true
+          body: |
+            ## Whistle v${{ needs.version.outputs.version }}
+
+            ```sh
+            npm install @tiny-stt/whistle@${{ needs.version.outputs.version }}
+            npx whistle download --out public/whistle
+            ```
+
+            React applications can also install `@tiny-stt/react@${{ needs.version.outputs.version }}`.
+
+            The SDK npm tarball contains the runtime, workers, types and CLI. Model weights are acquired explicitly by the installed CLI.
+
+            [Package](https://www.npmjs.com/package/@tiny-stt/whistle/v/${{ needs.version.outputs.version }}) · [Release and deployment setup](https://github.com/tobilg/tiny-stt/blob/main/packages/documentation/guides/releasing.md)

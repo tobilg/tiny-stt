@@ -1,0 +1,56 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "Whistle API",
+  "entryPoints": [
+    "../whistle/src/browser.ts",
+    "../whistle/src/node.ts",
+    "../whistle/src/audio.ts",
+    "../whistle/src/microphone.ts",
+    "../react/src/index.ts"
+  ],
+  "entryPointStrategy": "resolve",
+  "tsconfig": "tsconfig.api.json",
+  "router": "structure-dir",
+  "out": "dist",
+  "readme": "landing.md",
+  "projectDocuments": ["guides/*.md"],
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "excludeExternals": true,
+  "validation": {
+    "notDocumented": true,
+    "notExported": true,
+    "invalidLink": true
+  },
+  "requiredToBeDocumented": [
+    "Module",
+    "Namespace",
+    "Enum",
+    "EnumMember",
+    "Variable",
+    "Function",
+    "Class",
+    "Interface",
+    "Constructor",
+    "Property",
+    "Method",
+    "Accessor",
+    "TypeAlias"
+  ],
+  "treatWarningsAsErrors": true,
+  "navigationLinks": {
+    "GitHub": "https://github.com/tobilg/tiny-stt"
+  },
+  "sourceLinkTemplate": "https://github.com/tobilg/tiny-stt/blob/main/{path}#L{line}",
+  "disableGit": true,
+  "basePath": ".",
+  "displayBasePath": "../..",
+  "groupOrder": ["Guides", "API", "*"],
+  "navigation": {
+    "includeFolders": true,
+    "includeGroups": true,
+    "includeCategories": false
+  },
+  "packagesRequiringDocumentation": ["@tiny-stt/whistle", "@tiny-stt/react"]
+}

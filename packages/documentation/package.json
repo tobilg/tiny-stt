@@ -1,0 +1,28 @@
+{
+  "name": "@tiny-stt/documentation",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "build": "typedoc",
+    "check": "tsc --noEmit && typedoc --emit none",
+    "dev": "typedoc && node scripts/dev.mjs",
+    "preview": "vite dist --host 127.0.0.1 --port 4174 --strictPort",
+    "typecheck": "tsc --noEmit",
+    "test": "node scripts/check.mjs",
+    "test:pages": "node scripts/check.mjs --root",
+    "example:node": "node examples/node/transcribe.mjs ../whistle/.cache/assets ../whistle/tests/fixtures/jfk.wav"
+  },
+  "devDependencies": {
+    "@tiny-stt/whistle": "workspace:*",
+    "@types/node": "^26.6.5",
+    "@types/react": "19.3.0",
+    "playwright": "^1.64.0",
+    "react": "19.3.0",
+    "typedoc": "0.28.20",
+    "typescript": "5.9.3",
+    "vite": "^8.3.4",
+    "@tiny-stt/react": "workspace:*"
+  }
+}
