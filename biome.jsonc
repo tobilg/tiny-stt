@@ -8,7 +8,6 @@
       // Never rewrite licensed upstream bytes, integrity metadata, or generated output.
       "!!**/vendor",
       "!!**/dist",
-      "!!**/dist-pages",
       "!!artifacts",
       "!!**/node_modules",
       "!!**/.cache",

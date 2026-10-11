@@ -151,5 +151,9 @@ vite.config.ts.timestamp-*
 # Prepared model assets and browser test output
 /packages/demo/public/whistle/
 test-results/
-dist-pages/
 /artifacts/
+
+# Local Cloudflare state and secrets
+.wrangler/
+.dev.vars
+.dev.vars.*

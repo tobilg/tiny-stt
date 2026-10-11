@@ -6,6 +6,7 @@ packages:
 
 allowBuilds:
   esbuild: true
+  workerd: true
 
 # Preserve these already-installed versions from the npm lockfile during migration.
 # All other versions retain pnpm's default one-day minimum release age.

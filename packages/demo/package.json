@@ -10,12 +10,11 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "pnpm typecheck && vite build",
-    "build:pages": "pnpm typecheck && vite build --base / --outDir dist-pages",
-    "preview": "vite preview --host 127.0.0.1",
+    "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
     "typecheck": "tsc --noEmit",
     "assets:prepare": "whistle download --out public/whistle",
     "test": "node tests/browser.mjs",
-    "test:pages": "node tests/pages.mjs"
+    "test:build": "node tests/build.mjs"
   },
   "dependencies": {
     "@tiny-stt/whistle": "workspace:*",

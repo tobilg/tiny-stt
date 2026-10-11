@@ -8,7 +8,7 @@ import { serve } from '../../whistle/tests/server.mjs';
 const browserName = process.env.BROWSER ?? 'chromium';
 if (!['chromium', 'firefox', 'webkit'].includes(browserName)) throw Error('Unknown BROWSER.');
 const browser = await { chromium, firefox, webkit }[browserName].launch({ headless: true });
-const server = await serve(resolve('dist'), { base: '/demo/', csp: true });
+const server = await serve(resolve('dist'), { csp: true });
 const fixture = resolve('../whistle/tests/fixtures/jfk.wav');
 const wav = (await readFile(fixture)).toString('base64');
 let devServer;
@@ -338,7 +338,7 @@ try {
   // Development must work through Vite/React Refresh and StrictMode's effect replay.
   devServer = await createServer({ server: { host: '127.0.0.1', port: 0 } });
   await devServer.listen();
-  const devUrl = `http://127.0.0.1:${devServer.httpServer.address().port}/demo/`;
+  const devUrl = `http://127.0.0.1:${devServer.httpServer.address().port}/`;
   const dev = await openPage(`${devUrl}tests/lifecycle.html`);
   await load(dev.page);
   assert.equal(await dev.page.evaluate(() => capture.requests), 0);
@@ -384,7 +384,7 @@ try {
       throw Error('Concurrent loads must share initialization');
     await Promise.all([first, hookTest.second.load()]);
     hookTest.originalTranscribe = hookTest.whistle.transcribe;
-    hookTest.render({ assetsUrl: new URL('/demo/whistle/', location.href) });
+    hookTest.render({ assetsUrl: new URL('/whistle/', location.href) });
   });
   // Relative and absolute URLs are different configurations; wait for disposal,
   // then use equivalent absolute URL objects to verify stable render ownership.
@@ -393,7 +393,7 @@ try {
   await hooks.page.waitForFunction(() => hookTest.whistle.ready);
   await hooks.page.evaluate(() => {
     hookTest.originalTranscribe = hookTest.whistle.transcribe;
-    hookTest.render({ assetsUrl: new URL('/demo/whistle/', location.href) });
+    hookTest.render({ assetsUrl: new URL('/whistle/', location.href) });
   });
   await hooks.page.waitForFunction(
     () => hookTest.whistle.transcribe === hookTest.originalTranscribe && hookTest.whistle.ready,
@@ -442,7 +442,7 @@ try {
     capture.permission = 'pending';
     hookTest.captureResult = hookTest.recorder.start().catch((e) => e.code);
     hookTest.previous = hookTest.whistle;
-    hookTest.render({ assetsUrl: '/demo/whistle/', cache: 'none' });
+    hookTest.render({ assetsUrl: '/whistle/', cache: 'none' });
   });
   await hooks.page.waitForFunction(() => !hookTest.whistle.ready && capture.workers.size === 1);
   assert.equal(await hooks.page.evaluate(() => hookTest.captureResult), 'DISPOSED');
@@ -483,7 +483,7 @@ try {
   assert.deepEqual(external, []);
   const evidence = {
     browser: `${browserName} ${browser.version()}`,
-    production: '/demo/; self-hosted real speech, timestamps, same-file repeat, invalid file',
+    production: '/; self-hosted real speech, timestamps, same-file repeat, invalid file',
     language:
       'automatic detection, explicit file/recording hints, result language independent of selection, silence',
     loading: { downloadStatuses, cachedStatuses, cacheMisses },

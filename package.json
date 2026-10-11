@@ -37,17 +37,19 @@
     "docs:check": "pnpm build && pnpm --filter @tiny-stt/documentation run check",
     "docs:dev": "pnpm build && pnpm --filter @tiny-stt/documentation run dev",
     "docs:preview": "pnpm --filter @tiny-stt/documentation run preview",
+    "docs:deploy": "pnpm docs:build && wrangler pages deploy packages/documentation/dist --project-name tiny-stt-api-docs --branch main",
     "test:docs": "pnpm docs:check && pnpm --filter @tiny-stt/documentation run build && pnpm --filter @tiny-stt/documentation run test",
     "demo:prepare": "pnpm build && pnpm --filter @tiny-stt/demo run assets:prepare",
     "demo:dev": "pnpm build && pnpm --filter @tiny-stt/demo run dev",
-    "demo:build": "pnpm build && pnpm --filter @tiny-stt/demo run build",
-    "demo:build:pages": "pnpm build && pnpm --filter @tiny-stt/demo run build:pages",
+    "demo:build": "pnpm demo:prepare && pnpm --filter @tiny-stt/demo run build",
     "demo:preview": "pnpm --filter @tiny-stt/demo run preview",
+    "demo:deploy": "pnpm demo:build && wrangler pages deploy packages/demo/dist --project-name tiny-stt-demo --branch main",
     "test:demo": "pnpm demo:build && pnpm --filter @tiny-stt/demo run test",
     "pack:react": "pnpm build && pnpm --dir packages/react pack"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
+    "wrangler": "4.147.0",
     "yaml": "2.9.1"
   }
 }

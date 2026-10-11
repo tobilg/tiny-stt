@@ -56,15 +56,15 @@ jobs:
           retention-days: 7
       - name: Prepare self-hosted demo assets
         run: pnpm --filter @tiny-stt/demo run assets:prepare
-      - name: Build demo for the root of its Pages project
-        run: pnpm --filter @tiny-stt/demo run build:pages
+      - name: Build demo
+        run: pnpm --filter @tiny-stt/demo run build
       - run: pnpm --filter @tiny-stt/demo exec playwright install --with-deps chromium
       - name: Test the deployable demo with real speech and external hosts blocked
-        run: pnpm --filter @tiny-stt/demo run test:pages
+        run: pnpm --filter @tiny-stt/demo run test:build
       - uses: actions/upload-artifact@v7
         with:
           name: demo
-          path: packages/demo/dist-pages
+          path: packages/demo/dist
           if-no-files-found: error
           retention-days: 7
 
@@ -128,7 +128,6 @@ jobs:
       - run: pnpm test:browser
         env:
           BROWSER: ${{ matrix.browser }}
-      - run: pnpm demo:prepare
       - run: pnpm test:demo
         env:
           BROWSER: ${{ matrix.browser }}
@@ -184,7 +183,7 @@ jobs:
       - run: pnpm --filter @tiny-stt/documentation exec playwright install --with-deps chromium
       - run: pnpm test:docs
       - name: Check the documentation at its Pages root
-        run: pnpm --filter @tiny-stt/documentation run test:pages
+        run: pnpm --filter @tiny-stt/documentation run test:build
       - uses: actions/upload-artifact@v7
         with:
           name: documentation

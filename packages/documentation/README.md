@@ -31,6 +31,7 @@ the watcher and server; the port is strict, so conflicts fail visibly.
 | `pnpm docs:build` | Build Whistle and emit `packages/documentation/dist` |
 | `pnpm docs:check` | Build Whistle, typecheck embedded examples, validate API coverage and links |
 | `pnpm docs:preview` | Serve the existing static build on port 4174 |
+| `pnpm docs:deploy` | Rebuild and upload to the production `tiny-stt-api-docs` Pages project on branch `main` |
 | `pnpm test:docs` | Build/check, traverse all generated links/assets/anchors, test navigation and search under `/api/` |
 | `pnpm check` | Biome formatting, recommended lint rules and import organization across the workspace |
 | `pnpm example:node` | Build Whistle and run this package's Node example against prepared local assets |
@@ -81,7 +82,13 @@ The tools are private development dependencies and never enter the SDK runtime.
 Serve the entire `dist/` directory, including search data and scripts. Links are
 relative and directory URLs must resolve to `index.html`. A non-root `/api/` base
 is tested without rebuilding. Builds and previews do not publish or deploy.
-`pnpm --filter @tiny-stt/documentation run test:pages` checks the same output at
+For manual uploads from your machine, follow the
+[local Cloudflare setup](guides/releasing.md#manual-local-deployment), then run
+`pnpm docs:deploy` from the workspace root. It rebuilds and uploads independently
+of npm releases or GitHub Actions. That guide also covers preview branches,
+custom project names and uploading an already-reviewed build.
+
+`pnpm --filter @tiny-stt/documentation run test:build` checks the same output at
 `/`, as served by its dedicated Cloudflare Pages project. The release workflow
 uploads CI's tested `dist/` artifact to `tiny-stt-api-docs` by default; see
 [Releases and Cloudflare Pages](guides/releasing.md) for account configuration,

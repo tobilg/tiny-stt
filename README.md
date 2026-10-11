@@ -15,6 +15,8 @@ the browser application lives in `packages/demo`.
 The CLI executable is `whistle`. Model weights are downloaded
 explicitly and are excluded from the package tarball.
 
+[API Docs](https://tiny-stt-api-docs.gh.tobilg.com) · [Demo](https://tiny-stt-demo.gh.tobilg.com)
+
 ## Development
 
 Use Node **22.12+** or 24 and pnpm **12.4.2**, pinned in `packageManager`.
@@ -38,10 +40,10 @@ pnpm demo:prepare
 pnpm demo:dev
 ```
 
-Open **http://127.0.0.1:5173/demo/** (or the printed URL if that port is busy).
+Open **http://127.0.0.1:5173/** (or the printed URL if that port is busy).
 Recording starts only when you use the recording
 control; file transcription does not require microphone access. Production builds
-use `/demo/`: run `pnpm demo:build`, then `pnpm demo:preview`.
+use `/`: run `pnpm demo:build`, then `pnpm demo:preview`.
 The former `example:browser*` root commands remain aliases to the demo package.
 
 ## Verification and packaging
@@ -90,6 +92,32 @@ and YAML are maintained manually; no Prettier dependency remains.
 
 ## CI, releases and Pages
 
+The demo and docs each have one build, used for local preview and deployment:
+
+```sh
+pnpm demo:build
+pnpm docs:build
+pnpm demo:preview # http://127.0.0.1:4173/
+# In another terminal:
+pnpm docs:preview # http://127.0.0.1:4174/
+```
+
+`demo:build` prepares the verified model/runtime assets and emits `packages/demo/dist`.
+`docs:build` emits `packages/documentation/dist` without downloading a model.
+
+After the [one-time local Cloudflare setup](packages/documentation/guides/releasing.md#manual-local-deployment),
+these commands each rebuild and **deploy to production**:
+
+```sh
+pnpm demo:deploy
+pnpm docs:deploy
+```
+
+They use the pinned Wrangler CLI, projects `tiny-stt-demo` / `tiny-stt-api-docs`,
+and branch `main`. They work independently of npm publication and GitHub Actions.
+The guide also covers uploading an already-reviewed build, custom project names,
+and preview branches.
+
 The reusable [CI workflow](.github/workflows/ci.yml) checks the workspace, real-model
 Node/browser inference, installed tarball consumers, demo and documentation.
 The [release workflow](.github/workflows/release.yml) calls CI for matching `v*`
@@ -97,9 +125,7 @@ tags, publishes its verified SDK and React tarballs with npm trusted publishing,
 sites to Cloudflare Pages, and creates a GitHub release. Manual release runs
 default to `npm publish --dry-run`.
 
-Pages projects default to `tiny-stt-api-docs` and `tiny-stt-demo`. The demo has a
-separate root-path build: `pnpm demo:prepare && pnpm demo:build:pages` produces
-`packages/demo/dist-pages`. Follow the [release guide](packages/documentation/guides/releasing.md) for the required
+Follow the [release guide](packages/documentation/guides/releasing.md) for the required
 npm trusted publishers, Cloudflare secrets/project variables, and release checks.
 These workflows are configured locally; no live release or deployment is implied.
 

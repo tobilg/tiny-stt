@@ -11,7 +11,7 @@
     "preview": "vite dist --host 127.0.0.1 --port 4174 --strictPort",
     "typecheck": "tsc --noEmit",
     "test": "node scripts/check.mjs",
-    "test:pages": "node scripts/check.mjs --root",
+    "test:build": "node scripts/check.mjs --root",
     "example:node": "node examples/node/transcribe.mjs ../whistle/.cache/assets ../whistle/tests/fixtures/jfk.wav"
   },
   "devDependencies": {

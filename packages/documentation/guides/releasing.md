@@ -17,9 +17,10 @@ adapted to the public SDK and React hook packages, the React demo and the TypeDo
 CI covers Node 22/24 on Linux, macOS and Windows, Chromium/Firefox/WebKit, and
 Linux packed inference with Docker `--network none`. Demo capture tests use a
 licensed fixture instead of microphone hardware. Documentation tests check strict
-API coverage, examples, links and search at `/api/` and `/`. The demo is tested at
-`/demo/` and built separately at `/` for Pages. The isolated React consumer installs
-both CI tarballs and transcribes with external hosts blocked.
+API coverage, examples, links and search at `/api/` and `/`. The demo's standard
+build is tested and deployed at `/`. The isolated React consumer installs
+both CI tarballs and transcribes under `/demo/` with external hosts blocked,
+preserving coverage of non-root hosting.
 
 `check` packs both public packages once into the `npm-packages` artifact, together with
 `release.json` recording each package identity and SHA-512 integrity. Packed consumer jobs
@@ -71,7 +72,83 @@ The already-published initial version can be skipped only when its registry
 integrity matches the CI tarball exactly. A skip does not exercise OIDC; validate
 the new trusted publisher with the next unpublished version before it expires.
 
-## One-time Cloudflare setup
+## Manual local deployment
+
+Both sites can be built and uploaded from your machine, independently of npm
+publication, tags or GitHub Actions. Use Node 22.12+ or 24 and pnpm 12.4.2. All
+commands below run from the repository root. Wrangler **4.147.0** is a pinned
+workspace development dependency, matching CI.
+
+```sh
+pnpm install --frozen-lockfile
+pnpm demo:build
+pnpm docs:build
+```
+
+This builds the public packages, prepares and verifies the demo's model/runtime
+files (reusing valid local files), builds the demo at `/`, and generates the docs.
+The initial demo preparation downloads the pinned model; the docs alone need no
+model. Each site has one build for both local preview and deployment.
+
+| Site | Upload directory | Local preview |
+| --- | --- | --- |
+| Demo | `packages/demo/dist` | `pnpm demo:preview` → `http://127.0.0.1:4173/` |
+| Documentation | `packages/documentation/dist` | `pnpm docs:preview` → `http://127.0.0.1:4174/` |
+
+Run previews in separate terminals. Both sites are served at their own root URL.
+To check the upload directories with Playwright Chromium installed:
+
+```sh
+pnpm --filter @tiny-stt/demo run test:build
+pnpm --filter @tiny-stt/documentation run test:build
+```
+
+Authenticate with Cloudflare once, then create any missing **Direct Upload**
+projects with production branch `main`. Skip creation for projects that already
+exist. Wrangler prompts for your account if needed; `CLOUDFLARE_ACCOUNT_ID` can
+select it explicitly. The following setup follows Cloudflare's
+[Direct Upload instructions](https://developers.cloudflare.com/pages/get-started/direct-upload/):
+
+```sh
+export WRANGLER_SEND_METRICS=false
+pnpm exec wrangler login
+pnpm exec wrangler whoami
+pnpm exec wrangler pages project create tiny-stt-demo --production-branch main
+pnpm exec wrangler pages project create tiny-stt-api-docs --production-branch main
+```
+
+For token authentication, supply `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`
+through your shell or secret manager instead of OAuth login. Use a token scoped to
+Account → Cloudflare Pages → Edit for the intended account. Keep credentials out
+of source control. Local OAuth login does not require GitHub secrets.
+
+Each of these commands rebuilds its site and **updates production**:
+
+```sh
+pnpm demo:deploy
+pnpm docs:deploy
+```
+
+They explicitly target `tiny-stt-demo` / `tiny-stt-api-docs` on branch `main`,
+regardless of your checked-out Git branch. They upload your local working tree's
+build, including uncommitted changes. Wrangler prints the resulting deployment
+URL. The scripts do not publish npm packages or create a GitHub release.
+
+To upload the exact output you already previewed, or choose different project
+names or branches, use Wrangler directly:
+
+```sh
+pnpm exec wrangler pages deploy packages/demo/dist --project-name tiny-stt-demo --branch main
+pnpm exec wrangler pages deploy packages/documentation/dist --project-name tiny-stt-api-docs --branch main
+```
+
+Replace `main` with a preview branch such as `manual-preview` for a preview
+deployment, provided that branch is not the project's production branch. Replace
+`--project-name` for another project. GitHub repository variables only affect the
+workflow; they do not change these local commands. See the
+[Wrangler Pages command reference](https://developers.cloudflare.com/workers/wrangler/commands/pages/).
+
+## Cloudflare setup for GitHub Actions
 
 Create two **Direct Upload** Pages projects in the intended Cloudflare account
 with production branch `main`. Configure these GitHub repository secrets:
@@ -86,7 +163,7 @@ Project names have defaults and can be overridden with repository **variables**:
 | Site | Default project | Optional variable | CI output |
 | --- | --- | --- | --- |
 | Documentation | `tiny-stt-api-docs` | `CLOUDFLARE_DOCS_PROJECT` | `packages/documentation/dist` |
-| Demo | `tiny-stt-demo` | `CLOUDFLARE_DEMO_PROJECT` | `packages/demo/dist-pages` |
+| Demo | `tiny-stt-demo` | `CLOUDFLARE_DEMO_PROJECT` | `packages/demo/dist` |
 
 The workflow uses `cloudflare/wrangler-action@v4` with Wrangler 4.147.0 to upload
 the exact CI artifacts, using `--branch main`. It prints each resulting deployment

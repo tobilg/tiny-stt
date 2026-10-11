@@ -21,7 +21,7 @@ pnpm demo:dev
 ```
 
 The private `@tiny-stt/demo` package uses React 19 and Vite 8. Open the localhost
-URL's `/demo/` path, load the model, then choose a file or explicitly start
+URL, load the model, then choose a file or explicitly start
 recording. The [browser guide](./browser.md) explains the helper APIs.
 
 ## Install into another application

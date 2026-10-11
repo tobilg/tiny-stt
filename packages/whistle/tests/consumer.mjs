@@ -100,7 +100,7 @@ try {
   await cp('../demo', consumer, {
     recursive: true,
     filter: (path) =>
-      !/(^|[/\\])(node_modules|dist|dist-pages|tests|\.cache)([/\\]|$)/.test(path) &&
+      !/(^|[/\\])(node_modules|dist|tests|\.cache)([/\\]|$)/.test(path) &&
       !/[/\\]public[/\\]whistle([/\\]|$)/.test(path),
   });
   const demo = JSON.parse(await readFile('../demo/package.json', 'utf8'));
@@ -250,9 +250,15 @@ try {
   );
   assert.ok(!core.peerDependencies && !core.exports['./react']);
 
+  // Exercise a non-root deployment without changing the demo's default build.
   execFileSync(
     process.execPath,
-    [join(consumerRequire.resolve('vite/package.json'), '../bin/vite.js'), 'build'],
+    [
+      join(consumerRequire.resolve('vite/package.json'), '../bin/vite.js'),
+      'build',
+      '--base',
+      '/demo/',
+    ],
     { cwd: consumer, stdio: 'pipe' },
   );
   server = await serve(join(consumer, 'dist'), { base: '/demo/', csp: true });

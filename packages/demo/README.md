@@ -16,7 +16,7 @@ pnpm demo:prepare
 pnpm demo:dev
 ```
 
-Open **http://127.0.0.1:5173/demo/** (Vite prints another port if needed). Click
+Open **http://127.0.0.1:5173/** (Vite prints another port if needed). Click
 **Prepare model**, then choose an audio file or hold **Hold to talk** with a pointer, Space or
 Enter. Release to transcribe; recording stops automatically at 30 seconds. Cancel
 discards an operation. Word timestamps are optional. **Spoken language** defaults
@@ -48,9 +48,10 @@ pnpm demo:build
 pnpm demo:preview
 ```
 
-Open **http://127.0.0.1:4173/demo/**. Serve the entire `packages/demo/dist` directory
-under `/demo/`. Assets are copied from `public/whistle`; prepare them **before**
-building. To use another base, set `base` in `vite.config.ts`, or use
+Open **http://127.0.0.1:4173/**. Serve the entire `packages/demo/dist` directory
+at `/`. `demo:build` builds the public packages, prepares and verifies the model/runtime
+assets in `public/whistle`, then includes them in the build. This is the same build
+used for deployment. To use another base, set `base` in `vite.config.ts`, or use
 `pnpm --filter @tiny-stt/demo exec vite build --base /your-path/` after building the
 SDK. `import.meta.env.BASE_URL` keeps the asset directory aligned with Vite's base.
 For that custom build, pass the same `--base /your-path/` to Vite preview.
@@ -61,15 +62,17 @@ allowing same-origin scripts, workers, assets and WebAssembly compilation
 React Refresh/WebSocket setup. See the SDK's
 [deployment guide](../documentation/guides/deployment.md) for full requirements.
 Self-hosting does not cache the application for offline reopening; this demo is
-not a PWA. The commands build/serve locally and never deploy.
+not a PWA. Build and preview commands only run locally.
 
-For Cloudflare Pages, `pnpm demo:build:pages` builds at `/` into `dist-pages` after
-`pnpm demo:prepare`. Run `pnpm --filter @tiny-stt/demo run test:pages` to check the
+Run `pnpm --filter @tiny-stt/demo run test:build` to check the
 upload directory's hashes, size limits and real speech transcription with external
-hosts blocked. Preview it with
-`pnpm --filter @tiny-stt/demo exec vite preview --outDir dist-pages --base /`.
-The release workflow uploads this tested artifact to `tiny-stt-demo` by default.
-See the [release setup](../documentation/guides/releasing.md) for configuration.
+hosts blocked.
+
+After [local Cloudflare setup](../documentation/guides/releasing.md#manual-local-deployment),
+run `pnpm demo:deploy` from the workspace root to rebuild and **upload to production**
+in `tiny-stt-demo` on branch `main`. This includes the model and license notices.
+The guide covers custom project names, preview branches and uploading an existing
+build. The release workflow can also deploy CI's tested artifact independently.
 
 ## Development and validation
 
@@ -92,7 +95,7 @@ pnpm assets:prepare
 pnpm test:consumer
 ```
 
-Demo tests build production at `/demo/` and also run the Vite development server.
+Demo tests build production at `/` and also run the Vite development server.
 They exercise real model transcription, word bounds, repeated file selection,
 invalid files, initialization cancellation/retry, pointer/keyboard recording,
 permission denial and late grants, auto-stop, cancellation, and resource cleanup.

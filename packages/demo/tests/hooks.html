@@ -16,7 +16,7 @@
     function Harness({ assetsUrl, cache }) {
       const whistle = useWhistle({ assetsUrl, cache });
       const recorder = useWhistleRecorder(whistle, { maxDurationSeconds: 12 });
-      const second = useWhistle({ assetsUrl: '/demo/whistle/' });
+      const second = useWhistle({ assetsUrl: '/whistle/' });
       useEffect(() => {
         Object.assign(window.hookTest, { whistle, recorder, second });
       });
@@ -27,7 +27,7 @@
       );
     }
     window.hookTest = {
-      render: (options = { assetsUrl: '/demo/whistle/' }) =>
+      render: (options = { assetsUrl: '/whistle/' }) =>
         root.render(createElement(StrictMode, null, createElement(Harness, options))),
       unmount: () => root.unmount(),
       pcm: () => decodeAudio(window.fixtureBlob),

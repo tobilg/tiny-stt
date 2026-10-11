@@ -6,7 +6,7 @@ import { chromium } from 'playwright';
 import { serve } from '../../whistle/tests/server.mjs';
 
 // Check the exact directory uploaded by CI, including Pages' per-file limit.
-const output = resolve('dist-pages');
+const output = resolve('dist');
 let fileCount = 0;
 async function inspect(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
@@ -97,7 +97,7 @@ try {
     csp: 'passed',
   };
   await mkdir('.cache', { recursive: true });
-  await writeFile('.cache/pages.json', `${JSON.stringify(report, null, 2)}\n`);
+  await writeFile('.cache/build.json', `${JSON.stringify(report, null, 2)}\n`);
   console.log(JSON.stringify(report, null, 2));
 } finally {
   await browser?.close();
