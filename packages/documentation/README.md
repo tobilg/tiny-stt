@@ -82,6 +82,9 @@ The tools are private development dependencies and never enter the SDK runtime.
 Serve the entire `dist/` directory, including search data and scripts. Links are
 relative and directory URLs must resolve to `index.html`. A non-root `/api/` base
 is tested without rebuilding. Builds and previews do not publish or deploy.
+`typedoc.json` sets the production `hostedBaseUrl` for canonical links and the
+sitemap. Its `scripts/social-metadata.mjs` plugin adds Open Graph and Twitter cards
+to every page and copies `assets/opengraph.jpg` into the generated assets directory.
 For manual uploads from your machine, follow the
 [local Cloudflare setup](guides/releasing.md#manual-local-deployment), then run
 `pnpm docs:deploy` from the workspace root. It rebuilds and uploads independently

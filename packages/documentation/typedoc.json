@@ -12,6 +12,8 @@
   "tsconfig": "tsconfig.api.json",
   "router": "structure-dir",
   "out": "dist",
+  "hostedBaseUrl": "https://tiny-stt-api-docs.gh.tobilg.com/",
+  "plugin": ["./scripts/social-metadata.mjs"],
   "readme": "landing.md",
   "projectDocuments": ["guides/*.md"],
   "excludePrivate": true,
